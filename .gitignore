@@ -7,3 +7,4 @@ __pycache__/
 X_processed.csv
 y.csv
 models/
+outputs/
