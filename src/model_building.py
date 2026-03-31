@@ -3,7 +3,8 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression, Ridge, Lasso
 import joblib
-
+import os
+os.makedirs("../models", exist_ok=True)
 X = pd.read_csv("../data/X_processed.csv")
 y = pd.read_csv("../data/y.csv")
 

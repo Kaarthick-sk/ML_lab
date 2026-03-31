@@ -1,11 +1,10 @@
-# src/member2_eda.py
-
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 
 df = pd.read_csv("../data/diamonds.csv")
-
+os.makedirs("../outputs", exist_ok=True)
 # Scatter plot
 plt.scatter(df['carat'], df['price'])
 plt.xlabel("Carat")
