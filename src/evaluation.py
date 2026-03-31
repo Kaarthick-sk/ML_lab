@@ -1,55 +1,46 @@
+# src/member4_evaluation.py
 
-import streamlit as st
-import numpy as np
+import pandas as pd
+from sklearn.metrics import mean_squared_error, r2_score
 import joblib
+from sklearn.model_selection import train_test_split
 
-model = joblib.load("../models/ridge_model.pkl")
+# Load data
+X = pd.read_csv("../data/X_processed.csv")
+y = pd.read_csv("../data/y.csv")
 
-st.title("💎 Diamond Price Prediction System")
+# Split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42)
 
-page = st.sidebar.selectbox("Select Page",
-                           ["Prediction", "EDA", "Results", "Workflow"])
+# Load models
+models = {
+    "Linear Regression": joblib.load("../models/linear_model.pkl"),
+    "Ridge Regression": joblib.load("../models/ridge_model.pkl"),
+    "Lasso Regression": joblib.load("../models/lasso_model.pkl")
+}
 
-if page == "Prediction":
-    st.header("Predict Price")
+results = []
 
-    carat = st.number_input("Carat")
-    cut = st.number_input("Cut (0-4)")
-    color = st.number_input("Color (0-6)")
-    clarity = st.number_input("Clarity (0-6)")
-    depth = st.number_input("Depth")
-    table = st.number_input("Table")
-    x = st.number_input("Length")
-    y = st.number_input("Width")
-    z = st.number_input("Height")
+# Evaluate each model
+for name, model in models.items():
+    y_pred = model.predict(X_test)
 
-    volume = x * y * z
+    mse = mean_squared_error(y_test, y_pred)
+    rmse = mse ** 0.5
+    r2 = r2_score(y_test, y_pred)
 
-    if st.button("Predict"):
-        features = np.array([[carat, cut, color, clarity,
-                              depth, table, x, y, z, volume]])
-        prediction = model.predict(features)
-        st.success(f"Predicted Price: ${prediction[0][0]:.2f}")
+    results.append([name, mse, rmse, r2])
 
-# ---------------- EDA ----------------
-elif page == "EDA":
-    st.header("EDA Visualizations")
-    st.image("../outputs/carat_price.png")
-    st.image("../outputs/heatmap.png")
 
-# ---------------- Results ----------------
-elif page == "Results":
-    st.header("Model Comparison")
-    with open("../outputs/results.txt") as f:
-        st.text(f.read())
+# Convert to DataFrame
+results_df = pd.DataFrame(results, columns=["Model", "MSE", "RMSE", "R2"])
+print(results_df)
+# Save results
+results_df.to_csv("../outputs/results.csv", index=False)
 
-# ---------------- Workflow ----------------
-elif page == "Workflow":
-    st.header("Project Workflow")
-    st.write("""
-    1. Data Preprocessing  
-    2. Feature Engineering  
-    3. Model Training  
-    4. Model Evaluation  
-    5. Deployment using Streamlit  
-    """)
+# Also save readable text
+with open("../outputs/results.txt", "w") as f:
+    f.write(results_df.to_string(index=False))
+
+print("✅ Evaluation completed. Results saved.")
