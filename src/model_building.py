@@ -23,4 +23,4 @@ joblib.dump(lr, "../models/linear_model.pkl")
 joblib.dump(ridge, "../models/ridge_model.pkl")
 joblib.dump(lasso, "../models/lasso_model.pkl")
 
-print("✅ Models Trained & Saved")
+print("Models Trained & Saved")

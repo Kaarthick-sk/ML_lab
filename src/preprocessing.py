@@ -28,4 +28,4 @@ y = df[['price']]
 X.to_csv("../data/X_processed.csv", index=False)
 y.to_csv("../data/y.csv", index=False)
 
-print("✅ Preprocessing Done")
+print("Preprocessing Done")

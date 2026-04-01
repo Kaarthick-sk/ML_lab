@@ -43,4 +43,4 @@ results_df.to_csv("../outputs/results.csv", index=False)
 with open("../outputs/results.txt", "w") as f:
     f.write(results_df.to_string(index=False))
 
-print("✅ Evaluation completed. Results saved.")
+print("Evaluation completed. Results saved.")
