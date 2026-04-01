@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 
-df = pd.read_csv("../data/diamonds.csv")
+df = pd.read_csv("../data/diamonds.csv", index_col=0)
 
 df = df.drop_duplicates().dropna()
 
